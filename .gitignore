@@ -1,0 +1,6 @@
+/.gradle/
+/build/
+/run/
+/.idea/
+/*.iml
+/reference-irons-spells-n-spellbooks/
