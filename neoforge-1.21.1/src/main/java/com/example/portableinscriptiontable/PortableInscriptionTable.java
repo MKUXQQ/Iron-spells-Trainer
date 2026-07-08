@@ -9,10 +9,13 @@ import com.example.portableinscriptiontable.network.SaveSpellBalancePayload;
 import com.example.portableinscriptiontable.network.SyncSpellBalancePayload;
 import com.example.portableinscriptiontable.registry.ModItems;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -25,13 +28,15 @@ public class PortableInscriptionTable {
         ModItems.register(modEventBus);
         modEventBus.addListener(this::registerPayloads);
         NeoForge.EVENT_BUS.addListener(this::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onDatapackSync);
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onPlayerLoggedIn);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             PortableInscriptionClientEvents.register(modEventBus);
         }
     }
 
     private void registerPayloads(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar(MOD_ID).versioned("1.2");
+        PayloadRegistrar registrar = event.registrar(MOD_ID).versioned("1.4");
         registrar.playToServer(
                 OpenInscriptionTablePayload.TYPE,
                 OpenInscriptionTablePayload.STREAM_CODEC,
@@ -55,6 +60,14 @@ public class PortableInscriptionTable {
     }
 
     private void onServerStarted(ServerStartedEvent event) {
+        SpellBalanceStore.loadAndApply();
+    }
+
+    private void onDatapackSync(OnDatapackSyncEvent event) {
+        SpellBalanceStore.applyAll();
+    }
+
+    private void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         SpellBalanceStore.loadAndApply();
     }
 }

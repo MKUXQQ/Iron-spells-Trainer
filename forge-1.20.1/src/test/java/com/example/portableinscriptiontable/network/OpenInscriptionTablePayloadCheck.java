@@ -19,7 +19,7 @@ public final class OpenInscriptionTablePayloadCheck {
         visibleSpellBalanceWidgetsKeepFocus();
         selectedSpellBalanceRowUsesRaisedStyle();
         catRuneCreativeTabUsesStableId();
-        ResourceLocation id = OpenInscriptionTablePayload.TYPE.id();
+        ResourceLocation id = ModNetworkIds.OPEN_INSCRIPTION_TABLE;
 
         assertEquals("portable_inscription_table", id.getNamespace(), "payload namespace");
         assertEquals("open_inscription_table", id.getPath(), "payload path");
