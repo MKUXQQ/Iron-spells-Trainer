@@ -30,6 +30,8 @@ public class SaveSpellBalancePayload {
                     buf.readVarInt(),
                     buf.readDouble(),
                     buf.readDouble(),
+                    buf.readDouble(),
+                    buf.readBoolean(),
                     buf.readDouble()
             );
             rows.add(new SpellBalanceRow(id, displayName, source, castType, values));
@@ -47,6 +49,8 @@ public class SaveSpellBalancePayload {
             buf.writeDouble(row.values().cooldownSeconds());
             buf.writeDouble(row.values().manaCostMultiplier());
             buf.writeDouble(row.values().powerMultiplier());
+            buf.writeBoolean(row.values().survivalAllowed());
+            buf.writeDouble(row.values().projectileSpeed());
         }
     }
 

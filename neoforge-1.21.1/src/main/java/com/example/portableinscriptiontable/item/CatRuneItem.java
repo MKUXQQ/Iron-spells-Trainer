@@ -25,7 +25,10 @@ public class CatRuneItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player instanceof ServerPlayer serverPlayer) {
-            PacketDistributor.sendToPlayer(serverPlayer, new SyncSpellBalancePayload(SpellBalanceStore.snapshot(), true));
+            PacketDistributor.sendToPlayer(serverPlayer, new SyncSpellBalancePayload(
+                    SpellBalanceStore.snapshot(),
+                    true
+            ));
         }
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
     }

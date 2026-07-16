@@ -1,6 +1,7 @@
 package com.example.portableinscriptiontable;
 
 import com.example.portableinscriptiontable.client.PortableInscriptionClientEvents;
+import com.example.portableinscriptiontable.balance.SpellProjectileBalanceEvents;
 import com.example.portableinscriptiontable.balance.SpellBalanceStore;
 import com.example.portableinscriptiontable.network.OpenInscriptionTableHandler;
 import com.example.portableinscriptiontable.network.OpenInscriptionTablePayload;
@@ -30,13 +31,16 @@ public class PortableInscriptionTable {
         NeoForge.EVENT_BUS.addListener(this::onServerStarted);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onDatapackSync);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onPlayerLoggedIn);
+        NeoForge.EVENT_BUS.addListener(SpellProjectileBalanceEvents::onSpellPreCast);
+        NeoForge.EVENT_BUS.addListener(SpellProjectileBalanceEvents::onSpellCast);
+        NeoForge.EVENT_BUS.addListener(SpellProjectileBalanceEvents::onEntityJoinLevel);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             PortableInscriptionClientEvents.register(modEventBus);
         }
     }
 
     private void registerPayloads(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar(MOD_ID).versioned("1.4");
+        PayloadRegistrar registrar = event.registrar(MOD_ID).versioned("1.6");
         registrar.playToServer(
                 OpenInscriptionTablePayload.TYPE,
                 OpenInscriptionTablePayload.STREAM_CODEC,

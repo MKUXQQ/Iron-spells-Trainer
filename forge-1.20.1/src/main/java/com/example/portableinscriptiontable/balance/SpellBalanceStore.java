@@ -81,8 +81,14 @@ public final class SpellBalanceStore {
                 spell.getCastTime(1),
                 spell.getSpellCooldown() / 20.0,
                 spell.getManaCost(1) / Math.max(1.0, baseManaCost(spell)),
-                spell.getSpellPower(1, null) / Math.max(1.0, baseSpellPower(spell))
+                spell.getSpellPower(1, null) / Math.max(1.0, baseSpellPower(spell)),
+                true,
+                1.0
         );
+    }
+
+    public static SpellBalanceValues valuesFor(ResourceLocation spellId) {
+        return OVERRIDES.get(spellId);
     }
 
     public static void applyAll() {
@@ -112,12 +118,17 @@ public final class SpellBalanceStore {
                 return;
             }
             for (String key : root.keySet()) {
+                if (key.startsWith("_")) {
+                    continue;
+                }
                 JsonObject json = root.getAsJsonObject(key);
                 OVERRIDES.put(new ResourceLocation(key), SpellBalanceValues.sanitize(
                         json.has("castTimeTicks") ? json.get("castTimeTicks").getAsInt() : 0,
                         json.has("cooldownSeconds") ? json.get("cooldownSeconds").getAsDouble() : 0.0,
                         json.has("manaCostMultiplier") ? json.get("manaCostMultiplier").getAsDouble() : 1.0,
-                        json.has("powerMultiplier") ? json.get("powerMultiplier").getAsDouble() : 1.0
+                        json.has("powerMultiplier") ? json.get("powerMultiplier").getAsDouble() : 1.0,
+                        json.has("survivalAllowed") ? json.get("survivalAllowed").getAsBoolean() : true,
+                        json.has("projectileSpeed") ? json.get("projectileSpeed").getAsDouble() : 1.0
                 ));
             }
         } catch (Exception ignored) {
@@ -134,6 +145,8 @@ public final class SpellBalanceStore {
             json.addProperty("cooldownSeconds", values.cooldownSeconds());
             json.addProperty("manaCostMultiplier", values.manaCostMultiplier());
             json.addProperty("powerMultiplier", values.powerMultiplier());
+            json.addProperty("survivalAllowed", values.survivalAllowed());
+            json.addProperty("projectileSpeed", values.projectileSpeed());
             root.add(entry.getKey().toString(), json);
         }
         try {

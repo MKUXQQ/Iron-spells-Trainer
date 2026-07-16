@@ -19,7 +19,10 @@ public record RequestSpellBalancePayload() implements CustomPacketPayload {
     public static void handle(RequestSpellBalancePayload payload, IPayloadContext context) {
         context.enqueueWork(() -> PacketDistributor.sendToPlayer(
                 (net.minecraft.server.level.ServerPlayer) context.player(),
-                new SyncSpellBalancePayload(SpellBalanceStore.snapshot(), true)
+                new SyncSpellBalancePayload(
+                        SpellBalanceStore.snapshot(),
+                        true
+                )
         ));
     }
 

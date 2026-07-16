@@ -2,6 +2,7 @@ package com.example.portableinscriptiontable;
 
 import com.example.portableinscriptiontable.client.PortableInscriptionClientEvents;
 import com.example.portableinscriptiontable.balance.SpellBalanceStore;
+import com.example.portableinscriptiontable.balance.SpellProjectileBalanceEvents;
 import com.example.portableinscriptiontable.network.OpenInscriptionTableHandler;
 import com.example.portableinscriptiontable.network.ModNetwork;
 import com.example.portableinscriptiontable.registry.ModItems;
@@ -22,6 +23,9 @@ public class PortableInscriptionTable {
         ModItems.register(modEventBus);
         ModNetwork.register();
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
+        MinecraftForge.EVENT_BUS.addListener(SpellProjectileBalanceEvents::onSpellPreCast);
+        MinecraftForge.EVENT_BUS.addListener(SpellProjectileBalanceEvents::onSpellCast);
+        MinecraftForge.EVENT_BUS.addListener(SpellProjectileBalanceEvents::onEntityJoinLevel);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             PortableInscriptionClientEvents.register(modEventBus);
         }

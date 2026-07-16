@@ -9,7 +9,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import java.util.Optional;
 
 public final class ModNetwork {
-    private static final String VERSION = "1.1";
+    private static final String VERSION = "1.2";
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(ModNetworkIds.MAIN_CHANNEL)
             .networkProtocolVersion(() -> VERSION)

@@ -38,10 +38,12 @@ public class SyncSpellBalancePayload implements CustomPacketPayload {
             String displayName = buf.readUtf();
             String source = buf.readUtf();
             String castType = buf.readUtf();
-            SpellBalanceValues values = new SpellBalanceValues(
+            SpellBalanceValues values = SpellBalanceValues.sanitize(
                     buf.readVarInt(),
                     buf.readDouble(),
                     buf.readDouble(),
+                    buf.readDouble(),
+                    buf.readBoolean(),
                     buf.readDouble()
             );
             rows.add(new SpellBalanceRow(id, displayName, source, castType, values));
@@ -60,6 +62,8 @@ public class SyncSpellBalancePayload implements CustomPacketPayload {
             buf.writeDouble(row.values().cooldownSeconds());
             buf.writeDouble(row.values().manaCostMultiplier());
             buf.writeDouble(row.values().powerMultiplier());
+            buf.writeBoolean(row.values().survivalAllowed());
+            buf.writeDouble(row.values().projectileSpeed());
         }
     }
 

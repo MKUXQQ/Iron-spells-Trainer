@@ -4,20 +4,35 @@ public record SpellBalanceValues(
         int castTimeTicks,
         double cooldownSeconds,
         double manaCostMultiplier,
-        double powerMultiplier
+        double powerMultiplier,
+        boolean survivalAllowed,
+        double projectileSpeed
 ) {
+    public static SpellBalanceValues sanitize(
+            int castTimeTicks,
+            double cooldownSeconds,
+            double manaCostMultiplier,
+            double powerMultiplier,
+            boolean survivalAllowed,
+            double projectileSpeed
+    ) {
+        return new SpellBalanceValues(
+                Math.max(0, castTimeTicks),
+                cleanNonNegative(cooldownSeconds),
+                cleanNonNegative(manaCostMultiplier),
+                cleanNonNegative(powerMultiplier),
+                survivalAllowed,
+                cleanNonNegative(projectileSpeed)
+        );
+    }
+
     public static SpellBalanceValues sanitize(
             int castTimeTicks,
             double cooldownSeconds,
             double manaCostMultiplier,
             double powerMultiplier
     ) {
-        return new SpellBalanceValues(
-                Math.max(0, castTimeTicks),
-                cleanNonNegative(cooldownSeconds),
-                cleanNonNegative(manaCostMultiplier),
-                cleanNonNegative(powerMultiplier)
-        );
+        return sanitize(castTimeTicks, cooldownSeconds, manaCostMultiplier, powerMultiplier, true, 1.0);
     }
 
     public static int secondsToTicks(double seconds) {
