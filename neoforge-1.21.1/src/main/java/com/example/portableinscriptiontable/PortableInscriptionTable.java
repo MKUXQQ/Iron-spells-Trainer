@@ -4,6 +4,7 @@ import com.example.portableinscriptiontable.client.PortableInscriptionClientEven
 import com.example.portableinscriptiontable.command.QQIronSpellCommand;
 import com.example.portableinscriptiontable.balance.SpellProjectileBalanceEvents;
 import com.example.portableinscriptiontable.balance.SpellBalanceStore;
+import com.example.portableinscriptiontable.pool.SpellPoolStore;
 import com.example.portableinscriptiontable.network.OpenInscriptionTableHandler;
 import com.example.portableinscriptiontable.network.OpenInscriptionTablePayload;
 import com.example.portableinscriptiontable.network.RequestSpellBalancePayload;
@@ -42,7 +43,7 @@ public class PortableInscriptionTable {
     }
 
     private void registerPayloads(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar(MOD_ID).versioned("2.1");
+        PayloadRegistrar registrar = event.registrar(MOD_ID).versioned("2.2");
         registrar.playToServer(
                 OpenInscriptionTablePayload.TYPE,
                 OpenInscriptionTablePayload.STREAM_CODEC,
@@ -67,13 +68,16 @@ public class PortableInscriptionTable {
 
     private void onServerStarted(ServerStartedEvent event) {
         SpellBalanceStore.loadAndApply();
+        SpellPoolStore.reload();
     }
 
     private void onDatapackSync(OnDatapackSyncEvent event) {
         SpellBalanceStore.loadAndApply();
+        SpellPoolStore.reload();
     }
 
     private void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         SpellBalanceStore.loadAndApply();
+        SpellPoolStore.reload();
     }
 }

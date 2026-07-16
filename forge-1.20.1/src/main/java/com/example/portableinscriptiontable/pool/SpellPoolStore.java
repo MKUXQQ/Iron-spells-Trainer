@@ -37,6 +37,10 @@ public final class SpellPoolStore {
     private SpellPoolStore() {
     }
 
+    public static void reload() {
+        load();
+    }
+
     public static List<SpellPoolRow> snapshot(int page) {
         ensureLoaded();
         Set<ResourceLocation> enabled = new LinkedHashSet<>();

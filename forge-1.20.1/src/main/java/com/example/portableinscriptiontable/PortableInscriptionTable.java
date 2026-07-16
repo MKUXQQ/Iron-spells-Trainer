@@ -4,6 +4,7 @@ import com.example.portableinscriptiontable.client.PortableInscriptionClientEven
 import com.example.portableinscriptiontable.command.QQIronSpellCommand;
 import com.example.portableinscriptiontable.balance.SpellBalanceStore;
 import com.example.portableinscriptiontable.balance.SpellProjectileBalanceEvents;
+import com.example.portableinscriptiontable.pool.SpellPoolStore;
 import com.example.portableinscriptiontable.network.OpenInscriptionTableHandler;
 import com.example.portableinscriptiontable.network.ModNetwork;
 import com.example.portableinscriptiontable.registry.ModItems;
@@ -39,13 +40,16 @@ public class PortableInscriptionTable {
 
     private void onServerStarted(ServerStartedEvent event) {
         SpellBalanceStore.loadAndApply();
+        SpellPoolStore.reload();
     }
 
     private void onDatapackSync(OnDatapackSyncEvent event) {
         SpellBalanceStore.loadAndApply();
+        SpellPoolStore.reload();
     }
 
     private void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         SpellBalanceStore.loadAndApply();
+        SpellPoolStore.reload();
     }
 }

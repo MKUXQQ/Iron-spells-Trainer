@@ -39,6 +39,10 @@ foreach ($project in $projects) {
     if ($source -match 'durationMultiplier|column_duration|applyDurationMultiplier') {
         throw "$project still contains the removed duration control"
     }
+
+    if ($source -notmatch 'SpellPoolStore\.reload\(\)') {
+        throw "$project does not reload its spell pool when a world starts"
+    }
 }
 
 Write-Output 'Chest spell pool editor source check passed.'
